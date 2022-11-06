@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <title>{{% block title %} {% endblock %}</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link rel="shortcut icon" href="favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&amp;family=Libre+Franklin:ital,wght@0,400;0,500;0,700;1,400"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    {% load static %}
+
+    <!--  -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'project/css/bootstrap.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'project/css/slick.css' %}"
+    />
+
+    <!-- SLIDER -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'project/css/slick-theme.css' %}"
+    />
+    <!-- SLIDER -->
+
+    <link
+      rel="stylesheet"
+      href="{% static 'project/css/materialdesignicons.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'project/css/bootstrap-grid.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'project/css/fancybox.css' %}" />
+    <link rel="stylesheet" href="{% static 'project/css/tagsinput.css' %}" />
+    <link rel="stylesheet" href="{% static 'project/css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'project/css/my_styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'account/css/base.css' %}" />
+  </head>
+  <body>
+    <script>
+      // Rating
+
+      const rate = (rating, project_id) => {
+        console.log(rating, project_id);
+        fetch(`/rate/${project_id}/${rating}/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((rest) => {
+          window.location.reload();
+          // you may want to update the rating here
+          // to simplify stuff, I just reload the page
+        });
+      };
+
+      // Rating
+    </script>
+    <div class="container">
+      <header>{% include 'project/base/header.html' %}</header>
+      {% block content %} {% endblock %}
+      <footer>{% include 'project/base/footer.html' %}</footer>
+    </div>
+  </body>
+</html>

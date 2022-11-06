@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+{% extends 'project/base/base.html' %} {% block content %} {% load static %}
+<!--  -->
+{% load humanize %}
+<div id="content" class="site-content">
+  <main class="site-section section-main">
+    <div class="container">
+      <div class="project-listing">
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!--  -->
+
+        {% for d in data %}
+        <div
+          class="entry-project project-status-active{% if not d.3 %} project-status-funded {% endif %}"
+        >
+          <div class="project-media">
+            <a href="{% url 'single_campaign' d.1.id %}">
+              <img src="{{ d.0 }}" width="800" height="600" alt="" />
+              <span class="project-industry" title="Investment type"
+                ><em class="mdi mdi-information"> </em>
+                {{d.1.get_category_display}} &mdash; {% for t in d.1.tags.all %}
+                #{{t}} {% endfor %}
+              </span>
+
+              <span class="project-country" title="Latvia"
+                ><img
+                  class="office-country"
+                  src="assets/images/lv.svg"
+                  width="33"
+                  alt=""
+                />
+                <em class="screen-reader-text">Latvia</em></span
+              >
+            </a>
+
+            {%if d.3%}
+            <span class="project-status">
+              <em class="mdi mdi-plus">Active</em>
+            </span>
+
+            {%else%}
+            <span class="project-status">
+              <em class="mdi mdi-plus">Funded</em>
+            </span>
+            {%endif%}
+          </div>
+          <div class="project-details">
+            <h3 class="project-title">
+              <a>{{project.title}}</a>
+            </h3>
+            <div style="display: flex">
+              {% for tag in project.tags.all %}
+              <a
+                href="{% url 'campaigns' %}?slug={{tag.slug}}"
+                class="mr-1 badge badge-info"
+              >
+                <small>#{{ tag }} </small></a
+              >
+              {% endfor %}
+            </div>
+            <p class="project-summary">{{project.details}}</p>
+            <div class="project-specs">
+              <div class="project-total-invested">
+                <strong
+                  ><span class="currency-sign">$</span
+                  >{{d.1.target|intcomma}}</strong
+                >
+                <span>Target</span>
+              </div>
+              <div class="project-return"></div>
+              <div class="project-term"></div>
+              <div class="project-countdown">
+                <strong>{{d.1.get_duration}}</strong>
+                <span>To invest</span>
+              </div>
+            </div>
+            <div class="project-progress">
+              <div class="progress-bar">
+                <div
+                  class="progress-current"
+                  style="width: {{d.4|intcomma}}%"
+                ></div>
+                <div class="progress-minimum" style="width: {{d.4|intcomma}}%">
+                  <div class="progress-minimum-pointer">
+                    <span class="project-minimum-goal-info"
+                      >Min<span class="screen-reader-text">imum</span>
+                      goal</span
+                    >
+                    <span class="project-minimum-goal-amount"
+                      ><span class="currency-sign">€</span>50 000</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="progress-info">
+                <div class="progress-current-amount">
+                  <strong
+                    ><span class="currency-sign">$</span
+                    >{{d.2|intcomma}}</strong
+                  >
+                  invested
+                </div>
+                <div class="progress-amount-left">
+                  <strong
+                    ><span class="currency-sign">$</span
+                    >{{d.3|intcomma}}</strong
+                  >
+                  left
+                </div>
+              </div>
+            </div>
+            <div class="project-actions">
+              <a
+                href="{% url 'single_campaign' d.1.id %}"
+                class="button button-primary"
+              >
+                <p>campaign title: {{ d.1.title }}</p>
+                <p>campaign owner: {{ d.1.author }}</p>
+                Details</a
+              >
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <h3>No projects...</h3>
+        {% endfor %}
+        <!--  -->
+        <!--  -->
+        <!--  -->
+      </div>
+
+      {% include "pagination.html" with page=projects %}
+
+      <!-- <div class="pagination">
+        <span class="page-numbers current">1</span>
+        <a href="projects.html" class="page-numbers">2</a>
+        <span class="page-numbers dots">…</span>
+        <a href="projects.html" class="page-numbers">5</a>
+        <a href="projects.html" class="page-numbers"
+          >Next page<span class="mdi mdi-chevron-right"></span
+        ></a>
+      </div> -->
+    </div>
+  </main>
+</div>
+
+{% endblock %}

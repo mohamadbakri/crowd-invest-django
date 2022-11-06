@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{%extends "project/base/base.html"%} {%block title%}Edit your
+account{%endblock%} {%block content%}
+<h1>Delete Profile</h1>
+<p>
+  Are you sure you want to delete this profile ? {{ user.first_name}}
+  {{user.last_name }}
+</p>
+
+<form action="" method="post">
+  {% csrf_token %}
+  <a>
+    <input type="submit" class="btn btn-warning" value="Delete" />
+  </a>
+  <a class="btn btn-success btn-lg" href="{% url 'profile_show'%}">Cancel</a>
+</form>
+{% endblock %}

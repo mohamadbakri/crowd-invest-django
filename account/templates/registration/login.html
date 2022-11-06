@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends 'project/base/base.html' %} {% load static %} {% block title %} {%
+block title %}Log-in{% endblock %} {% block content %}
+<h1>Log-in</h1>
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% else %}
+<p>
+  Please, use the following form to log-in. If you don't have an account
+  <a href="{% url 'register' %}"> register here </a>.
+</p>
+{% endif %}
+<div class="login-form">
+  <form action="{% url 'login' %}" method="post">
+    <label for="id_username">Use Email or</label>
+    {{ form.as_p }} {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}" />
+    <p><input type="submit" value="Log-in" /></p>
+  </form>
+  <a class="btn btn-success" href="{% url 'social:begin' 'facebook' %}">
+    Login with Facebook
+  </a>
+  <p>
+    <a href="{% url 'password_reset' %}"> Forgotten your password? </a>
+  </p>
+</div>
+{% endblock %}

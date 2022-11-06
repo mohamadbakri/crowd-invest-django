@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% extends "project/base/base.html" %} {% block title %}Welcome{% endblock %}
+<!--  -->
+{%block content %}
+
+<h1>
+  {{request.user.first_name }}{{request.user.first_last }} Your account has been
+  successfully Deleted.
+</h1>
+<a class="btn btn-success" href="{% url 'register' %}">Register</a>
+<a class="btn btn-success" href="{% url 'social:begin' 'facebook' %}">
+  Login with Facebook
+</a>
+<br />
+<br />
+{% endblock %}

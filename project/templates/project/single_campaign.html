@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+{% extends 'project/base/base.html' %} {% load humanize %}
+<!--  -->
+{% block title %} {{ project.title }}{%endblock%}
+<!--  -->
+{% block content %}
+<!--  -->
+{% load static %}
+
+<style>
+  .rating-list li {
+    float: right;
+    color: #ddd;
+    padding: 10px 5px;
+  }
+
+  .rating-list li:hover,
+  .rating-list li:hover ~ li {
+    color: orange;
+  }
+
+  .rating-list {
+    display: inline-block;
+    list-style: none;
+  }
+  .checked {
+    color: orange;
+  }
+</style>
+<div id="content" class="site-content">
+  <main class="site-section section-main">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="card-body">
+            <h3 class="card-title">{{ project.title}}</h3>
+            <div style="display: flex">
+              {% for t in project.tags.all %}
+              <a
+                href="{% url 'campaigns' %}?slug={{tag.slug}}"
+                class="mr-1 badge badge-info"
+              >
+                <small style="color: green">#{{ t }} </small></a
+              >
+              {% endfor %}
+            </div>
+            <pre class="card-text" style="font-size: 16px">
+Details: <br/>{{ project.details|truncatechars:100}}</pre>
+          </div>
+        </div>
+        <!-- <div class="col-6 col-lg-3">
+          <div class="featured-box">
+            <h5 class="featured-box-title">€225 000</h5>
+            <p class="featured-box-content">Target</p>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="featured-box">
+            <h5 class="featured-box-title">16%</h5>
+            <p class="featured-box-content">Expected return</p>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="featured-box">
+            <h5 class="featured-box-title">23 months</h5>
+            <p class="featured-box-content">Term</p>
+          </div>
+        </div>-->
+        <style>
+          table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+          }
+
+          td,
+          th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+          }
+
+          tr:nth-child(even) {
+            background-color: #dddddd;
+          }
+        </style>
+        <div class="col-6 col-lg-3">
+          <!-- <div class="featured-box"> -->
+          <h5 class="featured-box-title" style="color: green">
+            Similar Projects
+          </h5>
+          <table>
+            <tr>
+              <th>Project</th>
+              <th>Average Rating</th>
+              <th>Total Rating</th>
+              <th>Tags</th>
+            </tr>
+            {% for p in similar_projects %}
+            <tr>
+              <td>
+                <a href="{% url 'single_campaign' p.id  %}">{{p.title}}</a>
+              </td>
+              <td>{{p.average_rating}}</td>
+              <td>{{p.sum_rating}}</td>
+              <td>
+                {% for tag in p.tags.all %}
+                <a
+                  style="display: inline"
+                  href="{% url 'campaigns' %}?slug={{tag.slug}}"
+                >
+                  <small>#{{ tag }} </small>
+                </a>
+                {% empty %}
+                <h6>No Tags ...</h6>
+                {% endfor%}
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+          <!-- <p class="featured-box-content">To invest</p> -->
+          <!-- </div> -->
+        </div>
+
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!--  -->
+      </div>
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <!-- <div class="project-progress-chart">
+                <svg viewBox="0 0 36 36">
+                  <path
+                    class="circle-total"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  ></path>
+                  <path
+                    class="circle-current"
+                    stroke-dasharray="8.275, 100"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  ></path>
+                </svg>
+                <div class="percentage-text">8.275%</div>
+              </div> -->
+              <div class="card-body">
+                <div class="percentage-text">{{percentage|intcomma}}%</div>
+                <p class="mt-4 mb-1" style="font-size: 0.77rem">
+                  <small>Target: </small>{{project.target|intcomma}}
+                </p>
+                <div class="progress rounded mb-2" style="height: 5px">
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    style="width:{{percentage|intcomma}}%"
+                    aria-valuenow="66"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="project-progress-numbers">
+                <h3>${{project_available_for_funds|intcomma}}</h3>
+                <p>Available for investment</p>
+                <hr />
+                <h3 class="status-funded">
+                  ${{project_collected_donations|intcomma}}
+                </h3>
+                <p class="status-funded">Already funded</p>
+              </div>
+              {%if user.is_authenticated %}
+              <!--  -->
+              {%if user.id == project.author.id %}
+              <!-- Project creator can cancel the project if the donations are less than 25% of the target -->
+              {%if percentage < 25 %}
+              <a
+                class="btn btn-danger"
+                href="{% url 'delete_campaign' project.id %}"
+                >Cancel Campaign &lt; 25%</a
+              >
+              {% endif %}
+              <!--  -->
+              {% endif %}
+              <!--  -->
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="data-box">
+            <div class="data-property">Country</div>
+            <div class="data-value">{{user.profile.country}}</div>
+            <div class="data-property">Date of issue</div>
+            <div class="data-value">
+              {{project.campaign_start_date |date:"d M, Y" }}
+            </div>
+            <div class="data-property">Closing date</div>
+            <div class="data-value">
+              {{project.campaign_end_date |date:"d M, Y" }}
+            </div>
+            <div class="data-property">Initial term</div>
+            <div class="data-value">23 months</div>
+            <div class="data-property">Collateral value</div>
+            <div class="data-value">${{project.target|intcomma}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <h3>Project gallery</h3>
+          <!-- <div class="video-wrapper status-pause">
+            <a href="#sample-video" class="video-playback"
+              ><span class="progress"></span><em class="mdi mdi-play"></em
+              ><em class="mdi mdi-pause"></em
+            ></a>
+          </div> -->
+          <div class="single_project_slide gallery gallery-columns-3">
+            {% for image in images%}
+            <figure class="gallery-item">
+              <div class="gallery-icon thumbnail">
+                <img src="{{image.images.url}}" alt="" />
+              </div>
+            </figure>
+            {% empty %}
+            <h3>No photos...</h3>
+            {% endfor %}
+          </div>
+          <div class="project-submit-investment">
+            <h3>Start investing</h3>
+            <p class="text-faded">
+              <span class="mdi mdi-check-bold"></span> Buyback guarantee
+            </p>
+            <p>Project Target <strong>${{project.target|intcomma}}</strong></p>
+            <p>
+              Total Investments
+              <strong>${{project_collected_donations|intcomma}}</strong>
+            </p>
+            <p>
+              Available for funds
+              <strong>${{project_available_for_funds|intcomma}}</strong>
+            </p>
+            <!--invest  -->
+            <!--invest  -->
+            <!--invest  -->
+            <!--invest  -->
+            <!--invest  -->
+            <!--invest  -->
+
+            {%if project_available_for_funds %}
+            <form
+              method="POST"
+              action="{% url 'invest' project.id %}?v={{project_available_for_funds}}"
+            >
+              {% for m in massages %} {{ m }} {% endfor %} {% csrf_token %}
+              <label for="amount" class="sr-only">Amount:</label>
+              <input
+                required
+                type="number"
+                id="amount"
+                name="amount"
+                placeholder="Enter the amount"
+              />
+              <!-- <label for="confirm">
+                <input type="checkbox" id="confirm" name="confirm" />
+                I confirm that I have read and agree with
+                <a href="#">Investment Agreement</a>
+              </label> -->
+              <button type="submit">Invest</button>
+              <div class="clear"></div>
+            </form>
+
+            {%else%}
+
+            <h3 style="background-color: green">Project Funded</h3>
+            {%endif%}
+            <!--invest  -->
+            <!--invest  -->
+            <!--invest  -->
+            <!--invest  -->
+            <!--invest  -->
+            <!-- comment -->
+          </div>
+
+          <!--  -->
+          <!--  -->
+          <!--  -->
+          <!--  -->
+          <!--  -->
+          <div class="col-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
+            <div class="entry entry-post">
+              <div class="entry-content">
+                <p>
+                  <!--  -->
+                </p>
+                <p></p>
+
+                <p></p>
+              </div>
+              <p>
+                <!--  -->
+                <!--  -->
+                <!--  -->
+                <!--  -->
+              </p>
+              <!--  -->
+              <!--  -->
+              <!--  -->
+            </div>
+          </div>
+        </div>
+        <div class="entry-footer">
+          <div class="row">
+            <!-- Avg rating: -->
+            <!-- Avg rating: -->
+            <!-- Avg rating: -->
+            <div class="col-md-6">
+              <div class="card-body">
+                <h5 class="card-title">
+                  Avg rating:
+                  <span
+                    class="fa fa-star {% if project.average_rating > 0 %} checked {% endif %}"
+                  ></span>
+                  <span
+                    class="fa fa-star {% if project.average_rating > 1 %} checked {% endif %}"
+                  ></span>
+                  <span
+                    class="fa fa-star {% if project.average_rating > 2 %} checked {% endif %}"
+                  ></span>
+                  <span
+                    class="fa fa-star {% if project.average_rating > 3 %} checked {% endif %}"
+                  ></span>
+                  <span
+                    class="fa fa-star {% if project.average_rating > 4 %} checked {% endif %}"
+                  ></span>
+                </h5>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rating -->
+          <br />
+          <!-- Rating -->
+          <!-- Rating -->
+          <div class="col-md-6">
+            <h5 style="color: #ff0085">Rate Project</h5>
+
+            <ul class="btn btn-light list-inline rating-list">
+              <li onclick="rate(5, {{ project.id }})">
+                <i
+                  class="fa fa-star {% if project.user_rating > 4 %} checked {% endif %}"
+                  title="Rate 5"
+                ></i>
+              </li>
+              <li onclick="rate(4, {{ project.id }})">
+                <i
+                  class="fa fa-star {% if project.user_rating > 3 %} checked {% endif %}"
+                  title="Rate 4"
+                ></i>
+              </li>
+              <li onclick="rate(3, {{ project.id }})">
+                <i
+                  class="fa fa-star {% if project.user_rating > 2 %} checked {% endif %}"
+                  title="Rate 3"
+                ></i>
+              </li>
+              <li onclick="rate(2, {{ project.id }})">
+                <i
+                  class="fa fa-star {% if project.user_rating > 1 %} checked {% endif %}"
+                  title="Rate 2"
+                ></i>
+              </li>
+              <li onclick="rate(1, {{ project.id }})">
+                <i
+                  class="fa fa-star {% if project.user_rating > 0 %} checked {% endif %}"
+                  title="Rate 1"
+                ></i>
+              </li>
+            </ul>
+            <!-- asie -->
+            <!-- asie -->
+            <!--     <aside class="author-box has-description clearfix">
+                <div class="row align-items-lg-center">
+                  <figure class="col-4 col-md-3 col-xl-2 author-box-image">
+                    <img
+                      alt=""
+                      src="{% static 'project/images/tmp/sample-avatar.jpg'%}"
+                      class="avatar photo"
+                      width="150"
+                      height="150"
+                    />
+                  </figure>
+                  <div class="col-8 col-md-9 col-xl-10">
+                    <h5 class="author-box-title">
+                      Published by
+                      <a
+                        href="http://liviucerchez.com/"
+                        title="Visit Liviu Cerchez’s website"
+                        rel="author external"
+                        >Liviu Cerchez</a
+                      >
+                    </h5>
+                    <div class="author-box-description">
+                      Hey I’m Liviu, a freelance Web Developer and Graphics
+                      Designer from Europe. You can find me on
+                      <a href="http://liviucerchez.com/">liviucerchez.com</a>.
+                      Follow me on Twitter &amp; Dribbble for any updates.
+                    </div>
+                  </div>
+                </div>
+              </aside>
+            </div>-->
+            <!-- asie -->
+            <!-- asie -->
+          </div>
+          <br />
+          <!-- Button trigger modal -->
+
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            data-toggle="modal"
+            data-target="#reportModal"
+          >
+            Report Campaign
+          </button>
+
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="reportModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div
+              class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+              role="document"
+            >
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLabel">
+                    Report Ticket
+                  </h3>
+                </div>
+                <div class="modal-body">
+                  <p>Hope everything is ok!</p>
+
+                  <form
+                    method="post"
+                    action="{% url 'report_campaign' project.id %}"
+                  >
+                    {% csrf_token %}
+                    <div class="mb-3">
+                      <label for="subject" class="form-label">Subject</label>
+                      <input
+                        type="text"
+                        name="subject"
+                        class="form-control"
+                        id="subject"
+                        placeholder="What is the report about?"
+                        required
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="details" class="form-label">Details</label>
+                      <textarea
+                        class="form-control"
+                        name="details"
+                        id="details"
+                        rows="3"
+                        placeholder="give us more details.."
+                        required
+                      ></textarea>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">
+                        Submit
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- Modal -->
+
+            <!-- <div class="col-md-6">
+              <div class="card-body">
+                <h5 class="card-title">
+                  Avg rating:
+                  <span
+                    class="fa fa-star {% if project.average_rating > 0 %} checked {% endif %}"
+                  ></span>
+                  <span
+                    class="fa fa-star {% if project.average_rating > 1 %} checked {% endif %}"
+                  ></span>
+                  <span
+                    class="fa fa-star {% if project.average_rating > 2 %} checked {% endif %}"
+                  ></span>
+                  <span
+                    class="fa fa-star {% if project.average_rating > 3 %} checked {% endif %}"
+                  ></span>
+                  <span
+                    class="fa fa-star {% if project.average_rating > 4 %} checked {% endif %}"
+                  ></span>
+                </h5>
+              </div>
+            </div>
+          </div> -->
+          </div>
+          <!--Comments  -->
+          <!--Comments  -->
+          <!--Comments  -->
+          {% load comment_tags %}
+          <!--  -->
+          {% render_comments project request %}
+          <!--  -->
+          {% get_comments_count project user %}
+
+          <div id="comments">
+            <!-- <div id="respond" class="comment-respond">
+              <h3 id="reply-title" class="comment-reply-title">
+                Leave a Reply
+              </h3>
+              <form
+                action="https://html.liviucerchez.com/crowdinvest/single-post.html"
+                method="post"
+                class="comment-form"
+              >
+                <p class="logged-in-as">
+                  <em
+                    >Your email address will not be published. Required fields
+                    are marked
+                    <span class="required" aria-hidden="true">*</span></em
+                  >
+                </p>
+                <p class="comment-form-author">
+                  <label for="author"
+                    >Name
+                    <span class="required" aria-hidden="true">*</span></label
+                  >
+                  <input
+                    id="author"
+                    name="author"
+                    value=""
+                    size="35"
+                    type="text"
+                  />
+                </p>
+                <p class="comment-form-email">
+                  <label for="email"
+                    >Email
+                    <span class="required" aria-hidden="true">*</span></label
+                  >
+                  <input
+                    id="email"
+                    name="email"
+                    value=""
+                    size="35"
+                    type="text"
+                  />
+                </p>
+                <p class="comment-form-comment">
+                  <label for="comment"
+                    >Comment
+                    <span class="required" aria-hidden="true">*</span></label
+                  >
+                  <textarea
+                    id="comment"
+                    name="comment"
+                    cols="45"
+                    rows="8"
+                  ></textarea>
+                </p>
+                <p class="form-submit">
+                  <input
+                    name="submit"
+                    id="submit"
+                    class="submit button-color button-filled"
+                    value="Post Comment"
+                    type="submit"
+                  />
+                </p>
+              </form>
+            </div>
+          </div> -->
+          </div>
+
+          <!--  -->
+          <!--  -->
+          <!--  -->
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    $("#exampleModal").on("shown.bs.modal", function () {
+      $("#myInput").trigger("focus");
+    });
+  </script>
+</div>
+{% endblock %}

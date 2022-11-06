@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+{% extends "project/base/base.html" %}
+<!--  -->
+{% block title %}Welcome{% endblock %} {% block content %}
+<h1>Welcome {{ new_user.first_name }}!</h1>
+<p>
+  Your Profile has been successfully created.
+  <a href="{% url 'home' %}">log in</a>.
+</p>
+{% endblock %}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+{% extends 'project/base/base.html' %} {% block content %} {% load static %}
+
+<div id="content">
+  <main class="site-section">
+    <!-- <main class="site-section section-main"> -->
+    <br /><br />
+    <div class="container">
+      <h3>Create Your Campaign</h3>
+      {% for i in form.errors.values %}
+      <!--  -->
+      <p>{{i}}</p>
+      <!--  -->
+      {% endfor %}
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+          <div class="w100 spacing1"></div>
+          <div class="col-12 col-md-4 col-lg-3">
+            <!-- First Third</h5> -->
+            <!-- <h5>User agreement</h5> -->
+          </div>
+          <div class="col-12 col-md-8 col-lg-6">
+            <!-- Second Third -->
+            <!-- <a href="#">User agreement 461729.pdf</a> -->
+          </div>
+          <div class="col-12 col-md-8 col-lg-3">
+            <!-- Third Third -->
+          </div>
+          <div class="w100 spacing1"></div>
+          <div class="col-12 col-md-4 col-lg-3">
+            <h5>Campaign information</h5>
+          </div>
+          <div class="col-12 col-md-8 col-lg-6">
+            <label for="title">Campaign Title</label>
+            <input
+              required
+              type="text"
+              id="title"
+              name="title"
+              class="underline"
+              placeholder="Campaign Title"
+            />
+            <label for="campaign-details">Campaign Details</label>
+            <textarea
+              required
+              rows="4"
+              cols="50"
+              id="campaign-details"
+              name="details"
+              class="underline"
+              placeholder="Campaing Details"
+            ></textarea>
+          </div>
+          <div class="w100 spacing1"></div>
+          <div class="col-12 col-md-4 col-lg-3"></div>
+          <div class="col-12 col-md-8 col-lg-6">
+            <label for="country">Category</label>
+            <select id="category" name="category" class="underline">
+              <option value="" disabled selected hidden>
+                Select Project Category
+              </option>
+              <option value="MD">Medical</option>
+              <option value="EM">Emergency</option>
+              <option value="ED">Education</option>
+            </select>
+            <label for="multiple-tags">tags</label>
+            <input
+              data-role="tagsinput"
+              required
+              type="text"
+              id="multiple-tags"
+              name="tags"
+              class="underline"
+              placeholder="Insert Tags"
+            />
+            <h5>Upload Campaign images</h5>
+            <!-- <label for="images">Upload Campaign images</label>
+            <input
+              required
+              id="images"
+              name="images"
+              type="file"
+              multiple
+              class="form-control-file underline"
+            /> -->
+            {{ formset.management_form }} {% for form in formset %} {{ form }}
+            {% endfor %}
+            <label for="total-target">Total Target</label>
+            <input
+              required
+              type="text"
+              id="total-target"
+              name="target"
+              class="underline"
+              placeholder="Total Target (i.e 250000 EGP)"
+            />
+            <label for="start-date">Campaign Start Date</label>
+            <input
+              required
+              type="date"
+              id="start-date"
+              name="campaign_start_date"
+              class="underline"
+              value=""
+            />
+          </div>
+          <div class="w100 spacing1"></div>
+          <div class="col-12 col-md-4 col-lg-3"></div>
+          <div class="col-12 col-md-8 col-lg-6">
+            <label for="end-date">Campaign End Date</label>
+            <input
+              required
+              type="date"
+              id="end-date"
+              name="campaign_end_date"
+              class="underline"
+              value=""
+            />
+          </div>
+          <div class="w100 spacing1"></div>
+          <div class="col-12 col-md-4 col-lg-3"></div>
+          <div class="col-12 col-md-8 col-lg-6"></div>
+          <div class="w100 spacing1"></div>
+          <div class="col-12 col-md-8 col-lg-6 offset-md-4 offset-lg-3">
+            <div style="text-align: center">
+              <button type="submit">Create Campaign</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+<br />
+<br />
+{% endblock %}

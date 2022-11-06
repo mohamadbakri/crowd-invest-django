@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+{% extends 'project/base/base.html' %} {% block content %} {% load static%}
+{%block title %} {%endblock%}
+<!--  -->
+{% load humanize %}
+<div id="content">
+  {% if latest_5_projects %}
+  <main class="site-section">
+    <!-- <main class="site-section section-main"> -->
+    <br /><br />
+    <div class="container">
+      <!--Search  -->
+      <!--Search  -->
+      <!--Search  -->
+      <!--Search  -->
+
+      <form
+        method="POST"
+        action="{% url 'search_campaigns' %}"
+        class="project-filters"
+      >
+        {% csrf_token %}
+        <div class="filter-props">
+          <p class="project-filter filter-status">
+            <label>Tags</label>
+            <select name="tag" id="tag">
+              <option value="" selected="selected">Select Tag</option>
+              {% for tag in tags %}
+              <option value="{{tag.slug}}">{{tag}}</option>
+              {% endfor %}
+            </select>
+          </p>
+          <p class="project-filter filter-return">
+            <label>Project Title</label>
+            <input
+              id="title"
+              name="title"
+              type="text"
+              class="minReturn"
+              placeholder="Project Title"
+            />
+          </p>
+          <p class="project-filter filter-country">
+            <!-- <label>Country</label>
+            <select name="country" id="country">
+              <option value="">All</option>
+              <option value="es">Estonia</option>
+              <option value="lv">Latvia</option>
+              <option value="lt">Lithuania</option>
+              <option value="world">Worldwide</option>
+            </select> -->
+          </p>
+          <p class="project-filter filter-type">
+            <br />
+            <br />
+            <br />
+            <br />
+            <!-- <label>Loan type</label>
+            <select name="type" id="type">
+              <option value="">All</option>
+              <option value="business">Business</option>
+              <option value="sme">SME</option>
+              <option value="leasing">Leasing</option>
+              <option value="realestate">Real estate</option>
+            </select> -->
+          </p>
+        </div>
+        <div class="filter-actions">
+          <button type="submit" class="button-primary">
+            <em class="mdi mdi-filter"></em> Filter projects
+          </button>
+          <button type="reset">
+            <em class="mdi mdi-restart"></em> Reset filters
+          </button>
+        </div>
+      </form>
+
+      <!--Search  -->
+      <!--Search  -->
+      <!--Search  -->
+      <!--Search  -->
+
+      <div class="row">
+        <div class="w100 spacing1"></div>
+        <div class="col-12 col-md-4 col-lg-3">
+          <!-- Latest New 5 projects. -->
+          <!-- Latest New 5 projects. -->
+
+          <h5>Latest New 5 projects.</h5>
+          <ul>
+            {% for p in latest_5_projects %}
+            <li>
+              <a href="{% url 'single_campaign' p.id %}?category={{cat}}">
+                {{p.title}}</a
+              >
+              <span style="font-size: smaller">
+                <small> Published :{{p.publish_date|date:'d M Y'}}</small>
+              </span>
+            </li>
+            {% endfor%}
+
+            <!-- Projects Categories. -->
+            <!-- Projects Categories. -->
+          </ul>
+          <h5>Projects Categories.</h5>
+          <ul>
+            <li>
+              <a href="{% url 'campaigns' %}">All Projects</a>
+            </li>
+            {% for cat in categories %}
+            <li>
+              <a href="{% url 'campaigns' %}?category={{cat}}">{{cat}}</a>
+            </li>
+
+            {% empty%}
+            <h5>No Projects....</h5>
+            {% endfor%}
+          </ul>
+          <!-- <h5>User agreement</h5> -->
+        </div>
+
+        <!-- The highest five rated running projects. -->
+        <!-- The highest five rated running projects. -->
+        <!-- The highest five rated running projects. -->
+
+        <div class="col-12 col-md-8 col-lg-6">
+          <h4 class="entry-titled">
+            The highest five rated
+            <span style="color: red">running(Active)</span>projects
+          </h4>
+          <div class="items">
+            <!-- SLIDE -->
+            <!-- SLIDE -->
+            {% for p in top_5_rated_projects %}
+            <div class="entry-project project-status-funded">
+              <div class="project-media">
+                <a href="{% url 'single_campaign' p.0.id %}?category={{cat}}">
+                  <img
+                    src="{{p.0.gallary.all.0.images.url}}"
+                    width="800"
+                    height="600"
+                    alt=""
+                  />
+
+                  <span class="project-industry" title="Investment type">
+                    <em class="mdi mdi-information"></em>
+                    {{p.0.get_category_display}} {% for t in p.0.tags.all %}
+                    #{{t}} {% endfor %}
+                  </span>
+                  <span class="project-country" title="Egypt">
+                    <img
+                      class="office-country"
+                      src="{% static 'project/images/eg.svg' %}"
+                      width="33"
+                      alt=""
+                    />
+                    <h3
+                      style="
+                        margin-top: 50%;
+                        text-align: center;
+                        color: rgb(173, 20, 28);
+                      "
+                    >
+                      Rating {{p.2}}
+                    </h3>
+                    <em class="screen-reader-text">Egypt</em></span
+                  >
+                </a>
+
+                {%if p.3%}
+                <span class="project-status">
+                  <em class="mdi mdi-plus">Active</em>
+                </span>
+
+                {%else%}
+                <span class="project-status">
+                  <em class="mdi mdi-plus">Funded</em>
+                </span>
+                {%endif%}
+              </div>
+              <div class="project-details">
+                <h4 class="project-title">
+                  <a href="{% url 'single_campaign' p.0.id %}">
+                    {{p.0.title}}
+                  </a>
+                </h4>
+                <div class="project-specs">
+                  <div class="project-total-invested">
+                    <strong
+                      ><span class="currency-sign">$</span
+                      >{{p.0.target|intcomma}}</strong
+                    >
+                    <span>Target</span>
+                  </div>
+                  <div class="project-return">
+                    <strong>${{p.1|intcomma}}</strong>
+                    <span>Invested</span>
+                  </div>
+                  <div class="project-term">
+                    <strong>{{p.0.get_duration}}</strong>
+                    <span>Term</span>
+                  </div>
+                </div>
+                <div class="project-actions">
+                  <a class="button button-outline button-disabled">
+                    <!-- No offers on the secondary market -->
+                    {{p.0.details|truncatechars:140}}
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {% endfor%}
+            <!-- SLIDE -->
+            <!-- SLIDE -->
+          </div>
+          <!-- <a href="#">User agreement 461729.pdf</a> -->
+        </div>
+        <div class="col-12 col-md-8 col-lg-3">
+          <!-- Latst 5 Featured Projects. -->
+          <!-- Latst 5 Featured Projects. -->
+          <!-- Latst 5 Featured Projects. -->
+
+          <h5>Latst 5 Featured Projects.</h5>
+          <ul>
+            {% for p in featured_projects %}
+            <li>
+              <a href="{% url 'single_campaign' p.id %}?category={{cat}}">
+                {{p.title}}</a
+              >
+              <span style="font-size: smaller">
+                <small> Published :{{p.publish_date|date:'d M Y'}}</small>
+              </span>
+            </li>
+            {% empty %}
+            <h5>No featured projects yet...</h5>
+            {% endfor%}
+          </ul>
+          <!-- Tags -->
+          <!-- Tags -->
+          <!-- Tags -->
+          <!-- Tags -->
+          <h5>Tags</h5>
+          <ul>
+            {% for tag in tags %}
+            <li>
+              <a
+                href="{% url 'campaigns' %}?slug={{tag.slug}}"
+                class="mr-1 tags"
+              >
+                <span style="font-size: smaller">
+                  <small>#{{ tag }} </small>
+                </span></a
+              >
+            </li>
+            {% empty %}
+            <h5>No Tags ...</h5>
+            {% endfor%}
+          </ul>
+          <!-- Tags -->
+          <!-- Tags -->
+          <!-- Tags -->
+        </div>
+        <div class="w100 spacing1"></div>
+      </div>
+    </div>
+  </main>
+
+  {% else %}
+
+  <h5>No Projects ...</h5>
+  {% endif %}
+</div>
+<br />
+<br />
+{% endblock %}

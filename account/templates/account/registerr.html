@@ -1,0 +1,53 @@
+ <!DOCTYPE html>
+{% extends 'project/base/base.html' %} {% load static %} {% block title %}
+Register {%endblock%} {% block content %}
+
+  <h1>Create an account</h1>
+  <p>Please, sign up using the following form:</p>
+  <form method="post">
+        {% csrf_token %}
+
+    <p>
+    <label for="id_username">Username:</label>
+    <input type="text" name="username" maxlength="150" required="" id="id_username">
+    
+      <span class="helptext">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span>
+    
+    
+  </p>
+
+  
+  <p>
+    <label for="id_first_name">First name:</label>
+    <input type="text" name="first_name" maxlength="150" id="id_first_name">
+    
+    
+  </p>
+
+  
+  <p>
+    <label for="id_email">Email address:</label>
+    <input type="email" name="email" maxlength="254" id="id_email">
+    
+    
+  </p>
+
+  
+  <p>
+    <label for="id_password">Password:</label>
+    <input type="password" name="password" required="" id="id_password">
+    
+    
+  </p>
+
+  
+  <p>
+    <label for="id_password2">Repeat password:</label>
+    <input type="password" name="password2" required="" id="id_password2">
+    
+
+  </p>
+    <p><input type="submit" value="Create my account"></p>
+  </form>
+{% endblock %}
+ 

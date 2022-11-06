@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+{% load static %} {% load humanize %}
+<body class="home navbar-sticky">
+  <a href="#content" class="skip-link screen-reader-text">
+    Skip to the content
+  </a>
+  <header id="top-header" class="site-header">
+    <div class="container">
+      <div class="site-identity">
+        <a href="{% url 'home' %}" class="site-title"
+          ><img
+            src="{% static 'project/images/logo.svg' %}"
+            class="custom-logo"
+            width="209"
+            height="18"
+            alt="CrowdInvest" /><span
+            class="back-to-home"
+            data-tooltip="Back to homepage"
+          ></span
+        ></a>
+        <p class="site-description screen-reader-text">
+          Business crowdfunding platform
+        </p>
+      </div>
+      <nav class="language-navigation">
+        <ul id="language-menu" class="menu">
+          <li class="menu-item-has-children">
+            <!-- <a href="">
+              <img
+                src="{% static 'project/images/en.svg' %}"
+                width="17"
+                alt=""
+              />
+               <span>En<em class="mdi mdi-chevron-down"></em></span> 
+            </a>-->
+            <!-- <ul class="sub-menu">
+              <li class="current-menu-item">
+                <a href="">English</a>
+              </li>
+              <li><a href="">Arabic</a></li>
+            </ul> -->
+          </li>
+        </ul>
+      </nav>
+      <nav class="main-navigation">
+        <ul id="menu-main" class="menu">
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li class="menu-item-has-children">
+            <a href="{% url 'campaigns' %}"
+              >Campaigns<em class="mdi mdi-chevron-down"></em
+            ></a>
+            <ul class="sub-menu">
+              <li><a href="{% url 'campaigns' %}">All Campaigns</a></li>
+              <li>
+                <a href="{% url 'home' %}">
+                  <i class="fa fa-search" aria-hidden="true">
+                    Search Campaigns
+                  </i>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!-- <li class="menu-item-has-children">
+            <a href="help.html">Help<em class="mdi mdi-chevron-down"></em></a>
+             <ul class="sub-menu">
+              <li><a href="help.html">Help &amp; Support</a></li>
+              <li><a href="contact.html">Contact Details</a></li>
+            </ul> 
+          </li> -->
+          <li class="menu-account menu-item-has-children">
+            <a href="{% url 'profile_show'%}"
+              ><em class="mdi mdi-account-outline"></em>
+              <span class="account-details">
+                {% if request.user.is_authenticated %}
+                <span class="account-name">
+                  {{request.user.first_name|default:request.user.username}}
+                </span>
+                {% endif %}
+                <span class="account-balance"
+                  ><em class="screen-reader-text">Total balance: </em
+                  ><strong class="account-balance-amount">
+                    {{user_total_donations|intcomma}}$
+                  </strong></span
+                ></span
+              ><em class="mdi mdi-chevron-down"></em
+            ></a>
+            <ul class="sub-menu">
+              <!--  -->
+              <!--  -->
+              <!--  -->
+              {% if not request.user.is_authenticated %}
+              <!--  -->
+              <li class="account-logint">
+                <a href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="account-logout">
+                <a href="{% url 'register' %}">Register</a>
+              </li>
+              <li class="account-logout">
+                <a href="{% url 'social:begin' 'facebook' %}"
+                  >Login with Facebook</a
+                >
+              </li>
+              <!--  -->
+              <!--  -->
+              <!--  -->
+              <!--  -->
+              {% elif request.user.username == 'admin' %}
+              <li class="account-logint">
+                <a href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="account-logout">
+                <a href="{% url 'register' %}">Register</a>
+              </li>
+              <li class="account-logout">
+                <a href="{% url 'logout' %}">Logout</a>
+              </li>
+              <!--  -->
+              <!--  -->
+              <!--  -->
+              <!--  -->
+              {% elif request.user.is_authenticated %}
+              <li><a href="{% url 'create_campaign' %}">Create Campaign</a></li>
+              <li><a href="{% url 'profile_show' %}">Show Profile</a></li>
+              <!-- <li><a href="{% url 'profile_edit' %}">Edit Profile</a></li> -->
+              <li class="account-logout">
+                <a href="{% url 'logout' %}">Logout</a>
+              </li>
+              <!-- <li>
+                <a href="{% url 'password_change' %}">Change Password</a>
+              </li> -->
+              <!--  -->
+              {% else %}
+              <!-- <li><a href="{% url 'profile_create' %}">Create Profile</a></li> -->
+              <li class="account-logout">
+                <a href="{% url 'logout' %}">Logout</a>
+              </li>
+              <!--  -->
+              {% endif %}
+              <!--  -->
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div id="menu-toggle">
+        <a href="#menu-main" title="Toggle menu">
+          <em class="mdi mdi-menu"></em><em class="mdi mdi-close"></em>
+          <span class="screen-reader-text">Menu</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <header id="featured" class="site-featured">
+    <div id="featured-media" class="featured-media has-media">
+      <div class="featured-text">
+        <div class="container">
+          <h1 class="entry-title">Leading business crowdfunding platform</h1>
+          <div class="tagline">
+            INVEST AND EARN PASSIVE INCOME STARTING TODAY!
+          </div>
+        </div>
+      </div>
+      <img src="{% static 'project/images/header.jpg' %}" alt="" />
+    </div>
+  </header>
+  <!-- </body> -->
+</body>

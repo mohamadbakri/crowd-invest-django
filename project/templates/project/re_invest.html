@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% extends "project/base/base.html" %} {% block title %}Welcome{% endblock %}
+<!--  -->
+{%block content %}
+
+<h3 style="color: orange">
+  The amount you entered exceeds the available to invest in campaign!
+</h3>
+
+<a class="btn btn-success" href="{% url 'home' %}">Home</a>
+<span style="color: white">&#124;</span>
+<a class="btn btn-success" href="{% url 'single_campaign' project.id %}"
+  >Re Invest</a
+>
+
+<br />
+<br />
+{% endblock %}

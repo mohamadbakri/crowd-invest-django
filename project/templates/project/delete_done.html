@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{% extends "project/base/base.html" %} {% block title %}Welcome{% endblock %}
+<!--  -->
+{%block content %}
+
+<h1>
+  {{user.first_name }}{{user.first_last }} Your project has been
+  successfully Deleted.
+</h1>
+<a class="btn btn-success" href="{% url 'home' %}">Home</a>
+<br />
+<br />
+{% endblock %}

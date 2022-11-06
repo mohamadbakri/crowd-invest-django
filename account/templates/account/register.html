@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% extends "project/base/base.html" %} {% block title %} Create an
+account{%endblock%} {%block content %}
+<h1>Create an account</h1>
+<p>Please, sign up using the following form:</p>
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %} {{user_form.as_p}}
+  <label for="id_phone">{{profile_form.phone.label}}</label>
+  {% for i in profile_form.errors.values %} {{i}} {% endfor %}
+  {{profile_form.phone}}
+  <label for="id_photo">{{profile_form.photo.label}}</label>
+  {{profile_form.photo}}
+  <p><input type="submit" value="Create my account" /></p>
+</form>
+{% endblock %}
