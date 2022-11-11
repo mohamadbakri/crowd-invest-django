@@ -2538,9 +2538,9 @@ input[type="search"]::-webkit-search-decoration {
   .menu-item-has-children
   .menu-item-has-children
   ul
-  > li:first-child:before {
+  /* > li:first-child:before {
   content: none;
-}
+} */
 
 .site-header .menu a .mdi {
   position: relative;

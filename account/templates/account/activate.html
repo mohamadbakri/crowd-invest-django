@@ -1,8 +1,8 @@
-{% autoescape off %}
+{% autoescape off %} 
 
-<p>Hi {{user.first_name}} {{user.last_name}}</p>
-<p>Please use the link below to verify your account.</p>
-<p>
-  This link will expire 24 hours later starting form the moment you receieve.
-</p>
-https://{{domain}}{% url 'activate' uidb64=uid token=token %}{%endautoescape%}
+Hi {{ user.first_name }} {{user.last_name}},
+Welcome to Crowd Invest!
+Please use the link below to verify your account,
+https://{{domain}}{% url 'activate' uidb64=uid token=token %}
+This link will expire 24 hours later starting form the moment you receieve.
+{% endautoescape %}

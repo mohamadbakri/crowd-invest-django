@@ -67,21 +67,32 @@
               <li><a href="contact.html">Contact Details</a></li>
             </ul> 
           </li> -->
-          <li class="menu-account menu-item-has-children">
-            <a href="{% url 'profile_show'%}"
-              ><em class="mdi mdi-account-outline"></em>
+          <li class=" menu-item-has-children">
+            <a href="{% url 'profile_show'%}">
+              <em class="mdi mdi-account-outline">
+                {% if request.user.is_authenticated %}
+                <img
+                  src="{{ request.user.profile.photo.url }}"
+                  onerror="ImgError(this)"
+                  alt=""
+                  class="avatar"
+                />
+
+                {% endif %}
+              </em>
               <span class="account-details">
                 {% if request.user.is_authenticated %}
                 <span class="account-name">
                   {{request.user.first_name|default:request.user.username}}
                 </span>
-                {% endif %}
                 <span class="account-balance"
                   ><em class="screen-reader-text">Total balance: </em
                   ><strong class="account-balance-amount">
                     {{user_total_donations|intcomma}}$
                   </strong></span
-                ></span
+                >
+
+                {% endif %} </span
               ><em class="mdi mdi-chevron-down"></em
             ></a>
             <ul class="sub-menu">
@@ -144,7 +155,8 @@
       </nav>
       <div id="menu-toggle">
         <a href="#menu-main" title="Toggle menu">
-          <em class="mdi mdi-menu"></em><em class="mdi mdi-close"></em>
+          <em class="mdi mdi-menu"></em>
+          <em class="mdi mdi-close"></em>
           <span class="screen-reader-text">Menu</span>
         </a>
       </div>
@@ -165,4 +177,11 @@
     </div>
   </header>
   <!-- </body> -->
+  <script>
+    function ImgError(source) {
+      source.src = "{% static 'images/default/avatar.jpeg' %}";
+      source.onerror = "";
+      return true;
+    }
+  </script>
 </body>
